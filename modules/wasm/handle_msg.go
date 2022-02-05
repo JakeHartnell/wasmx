@@ -1,6 +1,7 @@
 package wasm
 
 import (
+	"github.com/davecgh/go-spew/spew"
 	"github.com/disperze/wasmx/database"
 	"github.com/disperze/wasmx/types"
 
@@ -22,6 +23,8 @@ func HandleMsg(
 		return handleMsgStoreCode(tx, index, cosmosMsg, db)
 	case *wasmtypes.MsgInstantiateContract:
 		return handleMsgInstantiateContract(tx, index, cosmosMsg, db)
+	case *wasmtypes.MsgExecuteContract:
+		return handleMsgExecuteContract(tx, index, cosmosMsg, db)
 	}
 
 	return nil
@@ -65,4 +68,10 @@ func handleMsgInstantiateContract(tx *juno.Tx, index int, msg *wasmtypes.MsgInst
 	contract := types.NewContract(&contractInfo, contractAddress, tx.Timestamp)
 
 	return db.SaveContract(contract)
+}
+
+func handleMsgExecuteContract(tx *juno.Tx, index int, msg *wasmtypes.MsgExecuteContract, db *database.Db) error {
+	spew.Dump(msg)
+
+	return nil
 }
